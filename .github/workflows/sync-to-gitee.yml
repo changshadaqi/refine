@@ -10,11 +10,17 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Mirror to Gitee
         env:
           GITEE_USERNAME: ${{ secrets.GITEE_USERNAME }}
           GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+          GIT_TERMINAL_PROMPT: 0
         run: |
-          git clone --mirror "https://github.com/${{ github.repository }}.git" repo.git
-          git --git-dir=repo.git push --mirror "https://${GITEE_USERNAME}:${GITEE_TOKEN}@gitee.com/advance100/refine.git"
+          git push --mirror "https://${GITEE_USERNAME}:${GITEE_TOKEN}@gitee.com/advance100/refine.git"
